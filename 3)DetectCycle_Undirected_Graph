@@ -1,4 +1,6 @@
 
+# BREADTH FIRST SEARCH (BFS)
+
 class Solution {
   public:
   
@@ -36,6 +38,48 @@ class Solution {
             if(visited[i]==0)
             {
                 if(cycle(i,V,adj,visited))
+                {
+                    return true;
+                }
+            }
+        }
+      return false;    
+    }
+};
+
+
+# DEPTH FIRST SEARCH (DFS) :-
+
+class Solution {
+  public:
+  
+    bool dfs(int curr, int prev, vector<int>& visited, vector<int> adj[])
+    {
+        visited[curr]=1;
+        for(auto it:adj[curr])
+        {
+            if(visited[it]==0)
+            {
+                if(dfs(it,curr,visited,adj))
+                {
+                    return true;
+                }
+            }
+            else if(it!=prev)
+            {
+                return true;
+            }
+        }
+     return false;    
+    }
+    // Function to detect cycle in an undirected graph.
+    bool isCycle(int V, vector<int> adj[]) {
+        vector<int> visited(V+1,0);
+        for(int i=0;i<V;i++)
+        {
+            if(visited[i]==0)
+            {
+                if(dfs(i,-1,visited,adj))
                 {
                     return true;
                 }
