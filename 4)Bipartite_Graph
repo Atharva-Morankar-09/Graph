@@ -1,0 +1,47 @@
+
+# Breadth First Search (BFS) :
+
+class Solution {
+public:
+
+    bool check(int node, vector<int>& color, vector<int> adj[])
+    {
+        queue<int> q;
+        q.push(node);
+        color[node]=0;
+        while(!q.empty())
+        {
+            int curr=q.front();
+            q.pop();
+            for(auto it:adj[curr])
+            {
+                if(color[it]==-1)
+                {
+                    color[it]=1-color[curr];
+                    q.push(it);
+                }
+                else if(color[it]==color[curr])
+                {
+                    return false;
+                }
+            }
+        }
+      return true;    
+    }
+
+	bool isBipartite(int V, vector<int>adj[]){
+	    vector<int> color(V+1,-1);
+	    for(int i=0;i<V;i++)
+	    {
+	        if(color[i]==-1)
+	        {
+	            if(!check(i,color,adj))
+	            {
+	                return false;
+	            }
+	        }
+	    }
+	   return true; 
+	}
+
+};
