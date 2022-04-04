@@ -1,0 +1,44 @@
+
+# DEPTH FIRST SEARCH (DFS) :
+
+class Solution {
+  public:
+  
+    bool cycle(int curr,vector<int>& vis, vector<int>& dfsVis, vector<int> adj[])
+    {
+        vis[curr]=1;
+        dfsVis[curr]=1;
+        for(auto it:adj[curr])
+        {
+            if(vis[it]==0)
+            {
+                if(cycle(it,vis,dfsVis,adj))
+                {
+                    return true;
+                }
+            }
+            else if(dfsVis[it]==1)
+            {
+                return true;
+            }
+        }
+        dfsVis[curr]=0;
+      return false;    
+    }
+    
+    // Function to detect cycle in a directed graph.
+    bool isCyclic(int V, vector<int> adj[]) {
+        vector<int> vis(V+1,0),dfsVis(V+1,0);
+        for(int i=0;i<V;i++)
+        {
+            if(vis[i]==0)
+            {
+                if(cycle(i,vis,dfsVis,adj))
+                {
+                    return true;
+                }
+            }
+        }
+      return false;    
+    }
+};
