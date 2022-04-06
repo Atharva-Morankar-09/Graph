@@ -1,0 +1,41 @@
+
+# DEPTH FIRST SEARCH (DFS) :-
+
+class Solution
+{
+	public:
+  void dfs(int curr, vector<int>& visited, stack<int>& st, vector<int> adj[])
+	{
+	    visited[curr]=1;
+	    for(auto it:adj[curr])
+	    {
+	        if(visited[it]==0)
+	        {
+	            dfs(it,visited,st,adj);
+	        }
+	    }
+	   st.push(curr); 
+	}
+	
+	//Function to return list containing vertices in Topological order. 
+  
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    vector<int> visited(V+1,0),ans;
+	    stack<int> st;
+	    for(int i=0;i<V;i++)
+	    {
+	        if(visited[i]==0)
+	        {
+	            dfs(i,visited,st,adj);
+	        }
+	    }
+	    
+	    while(!st.empty())
+	    {
+	        ans.push_back(st.top());
+	        st.pop();
+	    }
+	  return ans;  
+	}
+};
