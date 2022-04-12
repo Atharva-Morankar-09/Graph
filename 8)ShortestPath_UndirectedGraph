@@ -2,7 +2,7 @@
 
 vector<int> ShortestPath(vector<int> adj[], int src, int V)
 {
-   vector<int> dist(V+1,INT_MAX);
+   vector<int> dist(V,INT_MAX);
    queue<int> q;
    dist[src]=0;
    q.push(src);
