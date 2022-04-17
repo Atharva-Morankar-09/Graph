@@ -1,0 +1,48 @@
+
+# Brute Force :
+
+class Solution
+{
+	public:
+	//Function to find sum of weights of edges of the Minimum Spanning Tree.
+    int spanningTree(int V, vector<vector<int>> adj[])
+    {
+        vector<int> key(V,INT_MAX);
+        vector<bool> mstSet(V,false);
+        vector<int> parent(V,-1);
+        
+        key[0]=0;
+        parent[0]=-1;
+        
+        for(int i=0;i<V-1;i++)
+        {
+            int min=INT_MAX,par;
+            for(int i=0;i<V;i++)
+            {
+                if(mstSet[i]==false && key[i]<min)
+                {
+                    par=i;
+                    min=key[i];
+                }
+            }
+            mstSet[par]=true;
+            
+            for(int i=0;i<adj[par].size();i++)
+            {
+                int wt = adj[par][i][1];
+                int k = adj[par][i][0];
+                if(mstSet[k]==false && wt < key[k])
+                {
+                    key[k]=wt;
+                    parent[k]=par;
+                }
+            }
+        }
+      int ans=0;
+      for(int i=0;i<key.size();i++)
+      {
+          ans+=key[i];
+      }
+     return ans; 
+    }
+};
