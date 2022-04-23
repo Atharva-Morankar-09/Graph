@@ -1,0 +1,51 @@
+
+vector<int> parent;
+vector<int> rank(n,0);
+
+void makeSet(){
+     for(int i=0;i<n;i++)
+     {
+       parent[i]=i;
+     }
+}
+
+int findPar(int node){
+     if(node = parent[node])
+     {
+         return node;
+     }
+    return parent[node] = findPar(parent[node]); 
+}
+
+void union(int a, int b){
+    a = findPar(a);
+    b = findPar(b);
+    
+    if(rank[a] > rank[b])
+    {
+        parent[b] = a;
+    }
+    else if(rank[a] < rank[b])
+    {
+        parent[a] = b;
+    }
+    else
+    {
+       parent[a] = b or parent[b] = a;
+       rank[b]++     or rank[a]++; 
+    }
+}
+
+
+// To find if nodes belong to same component
+bool sameComp(int a, int b)
+{
+  if(findPar(a)!=findPar(b))
+  {
+     return false;
+  }
+  else
+  {
+     return true; 
+  }
+}
