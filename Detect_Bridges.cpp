@@ -12,7 +12,7 @@ void bridge(int curr, int parent, int &t, vector<int> &time, vector<int> &low, v
         if (vis[it] == 0)
         {
             bridge(it, curr, t, time, low, vis, adj);
-            low[it] = min(low[it], low[curr]);
+            low[curr] = min(low[it], low[curr]);
             if (low[it] > time[curr])
             {
                 cout << curr << " " << it <<endl;
