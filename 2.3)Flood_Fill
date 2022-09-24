@@ -1,0 +1,65 @@
+
+GFG - https://practice.geeksforgeeks.org/problems/flood-fill-algorithm1856/1
+
+1) BFS - 
+
+class Solution {
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+        int n=image.size();
+        int m=image[0].size();
+        int initialC = image[sr][sc];
+        queue<pair<int,int>> q;
+        q.push({sr,sc});
+        vector<vector<int>> vis(n, vector<int>(m,0));
+        vis[sr][sc]=1;
+        int x[4]={0,1,0,-1};
+        int y[4]={1,0,-1,0};
+        while(!q.empty())
+        {
+            int r=q.front().first;
+            int c=q.front().second;
+            q.pop();
+            image[r][c]=newColor;
+            for(int i=0;i<4;i++)
+            {
+                int newR = r+x[i];
+                int newC = c+y[i];
+                if(newR>=0 && newR<n && newC>=0 && newC<m && image[newR][newC]==initialC && 
+                image[newR][newC]!=newColor && !vis[newR][newC])
+                {
+                    q.push({newR,newC});
+                    vis[newR][newC]=1;
+                }
+            }
+        }
+      return image;    
+    }
+};
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+2) DFS -
+
+class Solution {
+public:
+
+    void dfs(int i, int j, int newC, vector<vector<int>>& image, int initialC)
+    {
+        if(i<0 || j<0 || i>=image.size() || j>=image[0].size() || image[i][j]!=initialC || image[i][j]==newC)
+        {
+            return ;
+        }
+        image[i][j]=newC;
+        dfs(i+1,j,newC,image,initialC);
+        dfs(i-1,j,newC,image,initialC);
+        dfs(i,j+1,newC,image,initialC);
+        dfs(i,j-1,newC,image,initialC);
+    }
+   
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newC) {
+        int initialC=image[sr][sc];
+        dfs(sr,sc,newC,image,initialC);
+        return image;
+    }
+};
