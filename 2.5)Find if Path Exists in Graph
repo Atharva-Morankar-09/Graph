@@ -1,0 +1,69 @@
+
+Leetcode Link - https://leetcode.com/problems/find-if-path-exists-in-graph/
+
+1) BFS - 
+
+class Solution {
+public:
+    bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
+        vector<vector<int>> adj(n);
+        for(int i=0;i<edges.size();i++){
+            adj[edges[i][0]].push_back(edges[i][1]);
+            adj[edges[i][1]].push_back(edges[i][0]);
+        }
+        vector<int> vis(n);
+        queue<int> q;
+        q.push(source);
+        vis[source]=1;
+        while(!q.empty()){
+            int val=q.front();
+            q.pop();
+            if(val==destination){
+                return true;
+            }
+            
+            for(int i=0;i<adj[val].size();i++){
+                if(vis[adj[val][i]]==0){
+                    q.push(adj[val][i]);
+                    vis[adj[val][i]]=1;
+                }
+            }
+        }
+      return false;  
+    }
+};
+
+
+2) DFS - 
+
+class Solution {
+public:
+    
+    bool dfs(vector<vector<int>>& adj, vector<int>& vis, int src, int dst){
+        if(src==dst){
+            return true;
+        }
+        if(vis[src]){
+            return false;
+        }
+        
+        vis[src]=1;
+        
+        for(int i=0;i<adj[src].size();i++){
+            if(dfs(adj, vis, adj[src][i], dst)){
+                return true;
+            }
+        }
+       return false; 
+    }
+    
+    bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
+        vector<vector<int>> adj(n);
+        for(int i=0;i<edges.size();i++){
+            adj[edges[i][0]].push_back(edges[i][1]);
+            adj[edges[i][1]].push_back(edges[i][0]);
+        }
+        vector<int> vis(n);
+        return dfs(adj, vis, source, destination);
+    }
+};
