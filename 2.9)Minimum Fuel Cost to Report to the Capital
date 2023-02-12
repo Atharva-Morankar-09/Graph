@@ -1,0 +1,34 @@
+
+Leetcode Link - https://leetcode.com/problems/minimum-fuel-cost-to-report-to-the-capital/
+
+class Solution {
+public:  
+    long long fuel=0;
+    int dfs(int node, int parent, vector<vector<int>>& adj, int seats){
+        int rep=1;
+        for(auto child:adj[node]){
+            if(child!=parent){
+                rep+=dfs(child,node,adj,seats);
+            }
+        }
+        
+        if(node!=0){
+                fuel+=ceil((double)rep/seats);
+        } 
+        
+       return rep; 
+    }
+    
+    long long minimumFuelCost(vector<vector<int>>& roads, int seats) {
+        int n=roads.size()+1;
+        vector<vector<int>> adj(n);
+        
+        for(auto road:roads){
+            adj[road[0]].push_back(road[1]);
+            adj[road[1]].push_back(road[0]);
+        }
+        
+        dfs(0,-1,adj,seats);
+        return fuel;
+    }
+};
