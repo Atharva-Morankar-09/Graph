@@ -1,0 +1,39 @@
+
+Leetcode Link - https://leetcode.com/problems/number-of-operations-to-make-network-connected/
+
+class Solution {
+public:
+    
+    void dfs(int curr, vector<int>& vis, vector<vector<int>>& adj){
+        vis[curr]=1;
+        for(auto& it:adj[curr]){
+            if(vis[it]==0){
+                dfs(it,vis,adj);
+            }
+        }
+    }
+    
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        
+        if(connections.size()<n-1){
+            return -1;
+        }
+        
+        vector<vector<int>> adj(n+1);
+        int ans=0;
+        vector<int> vis(n+1);
+        
+        for(auto& con:connections){
+            adj[con[0]].push_back(con[1]);
+            adj[con[1]].push_back(con[0]);
+        }
+        
+        for(int i=0;i<n;i++){
+            if(vis[i]==0){
+                ans++;
+                dfs(i,vis,adj);
+            }
+        }
+      return ans-1; 
+    }
+};
