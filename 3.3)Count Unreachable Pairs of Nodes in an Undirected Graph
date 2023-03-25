@@ -1,0 +1,156 @@
+
+Leetcode Link - https://leetcode.com/problems/count-unreachable-pairs-of-nodes-in-an-undirected-graph/
+
+1) DFS -
+
+class Solution {
+public:
+    
+    int dfs(int curr, vector<int>& vis, vector<vector<int>>& adj){
+        int cnt=1;
+        vis[curr]=1;
+        for(int it:adj[curr]){
+            if(vis[it]==0){
+                cnt += dfs(it,vis,adj);
+            }
+        }
+      return cnt;  
+    }
+    
+    long long countPairs(int n, vector<vector<int>>& edges) {
+        vector<vector<int>> adj(n);
+        vector<int> vis(n);
+        for(auto e:edges){
+            adj[e[0]].push_back(e[1]);
+            adj[e[1]].push_back(e[0]);
+        }
+        long long sze=0;
+        long long ans=0;
+        long long total=n;
+        for(int i=0;i<n;i++){
+            if(vis[i]==0){
+                sze = dfs(i,vis,adj);
+                ans+= sze * (total-sze);
+                total-=sze;
+            }
+        }
+      return ans;   
+    }
+};
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+2) BFS - 
+
+class Solution {
+public:
+    
+    int dfs(int curr, vector<int>& vis, vector<vector<int>>& adj){
+        int cnt=1;
+        vis[curr]=1;
+        queue<int> q;
+        q.push(curr);
+        while(!q.empty()){
+            int node=q.front();
+            q.pop();
+            for(int it:adj[node]){
+                if(vis[it]==0){
+                    vis[it]=1;
+                    cnt++;
+                    q.push(it);
+                }
+            }
+        }
+      return cnt;  
+    }
+    
+    long long countPairs(int n, vector<vector<int>>& edges) {
+        vector<vector<int>> adj(n);
+        vector<int> vis(n);
+        for(auto e:edges){
+            adj[e[0]].push_back(e[1]);
+            adj[e[1]].push_back(e[0]);
+        }
+        long long sze=0;
+        long long ans=0;
+        long long total=n;
+        for(int i=0;i<n;i++){
+            if(vis[i]==0){
+                sze = dfs(i,vis,adj);
+                ans+= sze * (total-sze);
+                total-=sze;
+            }
+        }
+      return ans;   
+    }
+};
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+3) Union Find -
+
+class UnionFind{
+    vector<int> parent, rank;
+public:
+    UnionFind(int size){
+        parent.resize(size);
+        rank.resize(size,0);
+        
+        for(int i=0;i<size;i++){
+            parent[i]=i;
+        }
+    }
+    
+    int find(int x){
+        if(parent[x]!=x){
+            parent[x]=find(parent[x]);
+        }
+       return parent[x]; 
+    }
+    
+    void unionSet(int x, int y){
+        int xset=find(x);
+        int yset=find(y);
+        
+        if(xset==yset){
+            return ;
+        }
+        else if(rank[xset]<rank[yset]){
+            parent[xset]=yset;
+        }
+        else if(rank[xset]>rank[yset]){
+            parent[yset]=xset;
+        }
+        else{
+            parent[yset]=xset;
+            rank[xset]++;
+        }
+    }
+};
+
+class Solution {  
+public:
+    long long countPairs(int n, vector<vector<int>>& edges) {
+        UnionFind dsu(n);
+        for(auto ed:edges){
+            dsu.unionSet(ed[0],ed[1]);
+        }
+        
+        unordered_map<int,int> mp;
+        for(int i=0;i<n;i++){
+            mp[dsu.find(i)]++;
+        }
+        
+        long long ans=0;
+        long long tot=n;
+        for(auto comp:mp){
+            long long sze = comp.second;
+            ans+=sze*(n-sze);
+            n-=sze;
+        }
+        
+       return ans; 
+    }
+};
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
