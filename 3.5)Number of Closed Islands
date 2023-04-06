@@ -1,0 +1,46 @@
+
+Leetcode - https://leetcode.com/problems/number-of-closed-islands/
+
+class Solution {
+public:
+    
+    bool dfs(int i, int j, int n, int m, vector<vector<int>>& grid, vector<vector<bool>>& v){
+        if(i>=n || i<0 || j<0 || j>=m){
+            return false;
+        }
+        
+        if(grid[i][j]==1 || v[i][j]){
+            return true;
+        }
+        
+        v[i][j]=true;
+        bool isClose=true;
+        vector<int> x{0,-1,0,1};
+        vector<int> y{1,0,-1,0};
+        
+        for(int k=0;k<4;k++){
+            int r = i + x[k];
+            int c = j + y[k];
+            if(!dfs(r,c,n,m,grid,v)){
+                isClose=false;
+            }
+        }
+       return isClose;
+    }
+    
+    int closedIsland(vector<vector<int>>& grid) {
+        int n=grid.size();
+        int m=grid[0].size();
+        int ans=0;
+        vector<vector<bool>> v(n, vector<bool>(m));
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j]==0 && !v[i][j] && dfs(i,j,n,m,grid,v)){
+                    ans++;
+                }
+            }
+        }
+      return ans;  
+    }
+};
