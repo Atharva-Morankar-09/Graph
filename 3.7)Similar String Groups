@@ -1,0 +1,48 @@
+
+Leetcode - https://leetcode.com/problems/similar-string-groups/
+
+class Solution {
+public:
+    
+    void dfs(int curr, vector<vector<int>>& adj, vector<int>& vis){
+        vis[curr]=1;
+        for(auto it:adj[curr]){
+            if(vis[it]==0){
+                dfs(it,adj,vis);
+            }
+        }
+    }
+    
+    bool isSame(string a, string b){
+        int diff=0;
+        for(int i=0;i<a.size();i++){
+            if(a[i]!=b[i]){
+                diff++;
+            }
+        }
+       return diff==0 || diff==2; 
+    }
+    
+    int numSimilarGroups(vector<string>& strs) {
+        int n=strs.size();
+        vector<vector<int>> adj(n);
+        for(int i=0;i<n;i++){
+            for(int j=i+1;j<n;j++){
+                if(isSame(strs[i],strs[j])){
+                    adj[i].push_back(j);
+                    adj[j].push_back(i);
+                }
+            }
+        }
+        
+        int ans=0;
+        vector<int> vis(n);
+        for(int i=0;i<n;i++){
+            if(vis[i]==0){
+                dfs(i,adj,vis);
+                ans++;
+            }
+        }
+     return ans;   
+    }
+};
