@@ -1,0 +1,88 @@
+
+Leetcode Link - https://leetcode.com/problems/remove-max-number-of-edges-to-keep-graph-fully-traversable/
+
+class UnionFind{
+    vector<int> parent, rank;
+public:
+    UnionFind(int size){
+        parent.resize(size);
+        rank.resize(size,0);
+        
+        for(int i=0;i<size;i++){
+            parent[i]=i;
+        }
+    }
+    
+    int find(int x){
+        if(parent[x]!=x){
+            parent[x]=find(parent[x]);
+        }
+       return parent[x]; 
+    }
+    
+    bool unionSet(int x, int y){
+        int xset=find(x);
+        int yset=find(y);
+        
+        if(xset==yset){
+            return false;
+        }
+        else if(rank[xset]<rank[yset]){
+            parent[xset]=yset;
+            return true;
+        }
+        else if(rank[xset]>rank[yset]){
+            parent[yset]=xset;
+            return true;
+        }
+        else{
+            parent[yset]=xset;
+            rank[xset]++;
+            return true;
+        }
+    }
+};
+
+class Solution {
+public:
+    int maxNumEdgesToRemove(int n, vector<vector<int>>& edges) {
+        sort(edges.begin(),edges.end(),[&](auto const &a, auto const &b){
+            return a[0]>b[0];
+        });
+        
+        UnionFind aliceDSU(n+1);
+        UnionFind bobDSU(n+1);
+        
+        int removed=0,alice=0,bob=0;
+        
+        for(auto e:edges){
+            if(e[0]==3){
+                if(aliceDSU.unionSet(e[1],e[2])){
+                    bobDSU.unionSet(e[1],e[2]);
+                    alice++;
+                    bob++;
+                }
+                else{
+                    removed++;
+                }
+            }
+            else if(e[0]==2){
+                if(bobDSU.unionSet(e[1],e[2])){
+                    bob++;
+                }
+                else{
+                    removed++;
+                }
+            }
+            else{
+                if(aliceDSU.unionSet(e[1],e[2])){
+                    alice++;
+                }
+                else{
+                    removed++;
+                }
+            }
+        }
+      return (alice==n-1 && bob==n-1)?removed:-1;  
+    }
+};
